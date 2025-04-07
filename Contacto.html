@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+          height: 500px;
+          width: 100%;
+          margin-top: 10px;
+        }
+        body {
+          font-family: Helvetica Neue, Helvetica;
+          padding: 0px;
+          display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
+        }
+        .contact-info {
+          margin-bottom: 1px;
+        }
+      </style>
+</head>
+<body>
+    <h1>CONTACTANOS</h1>
+
+  <div class="contact-info">
+    <p><strong>Empresa:</strong> The Time Life</p>
+    <p><strong>Dirección:</strong> Rue du Rhône 25, 1204 Genève, Suiza</p>
+    <p><strong>Teléfono:</strong> +41 22 123 45 67</p>
+    <p><strong>Email:</strong> contacto@swissthetimelife.es</p>
+  </div>
+
+  <button onclick="getRoute()">Calcular Ruta Desde Mi Ubicación</button>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+  <script>
+    const empresaLatLng = [46.2044, 6.1432]; // Ginebra, Suiza
+
+    const map = L.map('map').setView(empresaLatLng, 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker(empresaLatLng).addTo(map)
+      .bindPopup('SwissTech Solutions<br>Rue du Rhône 25, Ginebra')
+      .openPopup();
+
+    let control = null;
+
+    function getRoute() {
+      if (!navigator.geolocation) {
+        alert("Tu navegador no soporta geolocalización.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        const userLatLng = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+
+        if (control) {
+          map.removeControl(control);
+        }
+
+        control = L.Routing.control({
+          waypoints: [
+            L.latLng(userLatLng),
+            L.latLng(empresaLatLng)
+          ],
+          routeWhileDragging: false,
+          language: 'es'
+        }).addTo(map);
+
+      }, error => {
+        alert("No se pudo obtener tu ubicación.");
+      });
+    }
+  </script>
+
+    <div class="Fondo01"></div>
+
+    <footer>
+        <p>&copy; 2025 Relojes Suizos Exclusivos | Síguenos en:</p>
+        <div class="redes">
+            <a href="#"><img src="images/Facebook02.jfif" alt="Facebook"></a>
+            <a href="#"><img src="images/Instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="images/X.jfif" alt="X"></a>
+        </div>
+    </footer> 
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+             font-family: Helvetica Neue, Helvetica;
+             margin: 0px;
+             }
+        form {
+             max-width: 600px;
+              margin: auto;
+             }
+        fieldset {
+             margin-bottom: 20px; 
+             padding: 15px;
+             }
+        legend { 
+            font-weight: bold;
+         }
+        label { 
+            display: block;
+             margin-top: 10px;
+             }
+        .presupuesto-final {
+             font-weight: bold;
+              margin-top: 15px;
+             }
+        .error { 
+            color: red; 
+            font-size: 0.9em; 
+            display: none;
+         }
+      </style>
+</head>
+<body>
+
+    <h1>Solicitud de Presupuesto</h1>
+    <form id="presupuestoForm">
+      <!-- Datos de contacto -->
+      <fieldset>
+        <legend>Datos de contacto</legend>
+        <label>Nombre:
+          <input type="text" id="nombre" maxlength="15" required>
+          <span class="error" id="errorNombre">Nombre inválido</span>
+        </label>
+        <label>Apellidos:
+          <input type="text" id="apellidos" maxlength="40" required>
+          <span class="error" id="errorApellidos">Apellidos inválidos</span>
+        </label>
+        <label>Teléfono:
+          <input type="text" id="telefono" maxlength="9" required>
+          <span class="error" id="errorTelefono">Teléfono inválido</span>
+        </label>
+        <label>Correo electrónico:
+          <input type="email" id="email" required>
+          <span class="error" id="errorEmail">Correo inválido</span>
+        </label>
+      </fieldset>
+  
+      <!-- Presupuesto -->
+      <fieldset>
+        <legend>Opciones de presupuesto</legend>
+  
+        <label>Producto:
+          <select id="producto">
+            <option value="17800000">Rolex Daytona(Paul Newman) - 17800000€</option>
+            <option value="419350">Rolex Gmt-Master II - 419350€</option>
+            <option value="244970">Rolex Day-Date - 244970€</option>
+            <option value="216000">Rolex Gmt-Master II - 216000€</option>
+            <option value="31000000">Omega Speedmaster CK29151 - 31000000€</option>
+            <option value="17000">Omega Seamaster Dial Azul Automatic - 17000€</option>
+            <option value="12950">Omega Speedmaster Automatic Mnes - 12950€</option>
+            <option value="11000">Oemga Speedmaster Coaxial Chronograph - 11000€</option>
+            <option value="311940000">Patek Philippe Grandmaster Chime - 311940000€</option>
+            <option value="192000000">Patek Philippe La Supercomplicación de Henry - 192000000€</option>
+            <option value="46000000">Patek Philippe 1527 Calendario Perpetuo 18k - 46000000€</option>
+            <option value="40000000">Patek Philippe Grand Complication Calibre 89 - 40000000€</option>
+            <option value="825000">Audemars Piguet Royal Oak - 825000€</option>
+            <option value="43000">Audemars Piguet Royal Oak Jumbo Extra-Thimn - 43000€</option>
+            <option value="351646">Audemars Piguet Royal Oak Tourbillon - 351646€</option>
+            <option value="499000">Audemars Piguet Royal Oak Perpetual Calendar - 499000€</option>
+            <option value="4800">Breitling Premier B21 Chronograph Tourbillon 42 - 4800€</option>
+            <option value="12000">Breitling Professional Emergency Mission II Titanium - 12000€</option>
+            <option value="32000">Nreitling Navitimer Chronograph 43 - 32000€</option>
+            <option value="50000">Breitling Bentley Flying B - 50000€</option>
+            <option value="8750">IWC Geral Genta - 8750€</option>
+            <option value="20900">IWC Schaffhausem Portugieser Cronografo - 20900€</option>
+            <option value="8900">IWC Schaffausem Aviador Cronografo - 8900€</option>
+            <option value="30000">Tudor Big Crown Submariner - 30000€</option>
+            <option value="4440">Tudor Black Bay Pro - 4440€</option>
+            <option value="72500">Tag Heuer Monaco V4 - 72500€</option>
+            <option value="72500">Tag Heuer Carrera Chronosprint X Porsche Rallye - 72500€</option>
+            <option value="260000000">Jaeger Lecolutre-Joaillerie - 260000000€</option>
+            <option value="19200">Jaeger Lecolutre Master Control Chronograph Calendar - 19200€</option>
+            <option value="30000000">Hublot MP-05 LAFERRARI - 30000000€</option>
+            <option value="12500">Hublot Titanium king Gold - 12500€</option>
+          </select>
+        </label>
+  
+        <label>Plazo de entrega (días):
+          <input type="number" id="plazo" min="7"  max="31" value="7"> 
+        </label>
+  
+        <label>Extras:</label>
+        <label><input type="checkbox" class="extra" value="20"> Embalaje especial (+20€)</label>
+        <label><input type="checkbox" class="extra" value="50"> Instalación incluida (+50€)</label>
+        <label><input type="checkbox" class="extra" value="30"> Asistencia técnica (+30€)</label>
+  
+        <div class="presupuesto-final">Presupuesto total: <span id="total">0</span> €</div>
+      </fieldset>
+  
+      <!-- Condiciones -->
+      <fieldset>
+        <legend>Condiciones</legend>
+        <label><input type="checkbox" id="condiciones"> Acepto las condiciones de privacidad</label>
+      </fieldset>
+  
+      <!-- Botones -->
+      <button type="submit">Enviar</button>
+      <button type="reset">Resetear</button>
+    </form>
+  
+    <script>
+      const form = document.getElementById("presupuestoForm");
+      const totalSpan = document.getElementById("total");
+  
+      function calcularPresupuesto() {
+        let total = parseFloat(document.getElementById("producto").value);
+        const plazo = parseInt(document.getElementById("plazo").value);
+        const extras = document.querySelectorAll(".extra:checked");
+  
+        extras.forEach(extra => {
+          total += parseFloat(extra.value);
+        });
+  
+        // Descuento del 10% si el plazo es mayor a 10 días
+        if (plazo > 10) {
+          total *= 0.9;
+        }
+  
+        totalSpan.textContent = total.toFixed(2);
+      }
+  
+      document.getElementById("producto").addEventListener("change", calcularPresupuesto);
+      document.getElementById("plazo").addEventListener("input", calcularPresupuesto);
+      document.querySelectorAll(".extra").forEach(cb => cb.addEventListener("change", calcularPresupuesto));
+  
+      calcularPresupuesto(); // Inicial
+  
+      function validarFormulario(e) {
+        e.preventDefault();
+  
+        let valido = true;
+  
+        const nombre = document.getElementById("nombre");
+        const apellidos = document.getElementById("apellidos");
+        const telefono = document.getElementById("telefono");
+        const email = document.getElementById("email");
+        const condiciones = document.getElementById("condiciones");
+  
+        const errorNombre = document.getElementById("errorNombre");
+        const errorApellidos = document.getElementById("errorApellidos");
+        const errorTelefono = document.getElementById("errorTelefono");
+        const errorEmail = document.getElementById("errorEmail");
+  
+        // Validar nombre
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{1,15}$/.test(nombre.value)) {
+          errorNombre.style.display = "inline";
+          valido = false;
+        } else {
+          errorNombre.style.display = "none";
+        }
+  
+        // Validar apellidos
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{1,40}$/.test(apellidos.value)) {
+          errorApellidos.style.display = "inline";
+          valido = false;
+        } else {
+          errorApellidos.style.display = "none";
+        }
+  
+        // Validar teléfono
+        if (!/^\d{9}$/.test(telefono.value)) {
+          errorTelefono.style.display = "inline";
+          valido = false;
+        } else {
+          errorTelefono.style.display = "none";
+        }
+  
+        // Validar correo
+        if (!/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(email.value)) {
+          errorEmail.style.display = "inline";
+          valido = false;
+        } else {
+          errorEmail.style.display = "none";
+        }
+  
+        // Validar condiciones
+        if (!condiciones.checked) {
+          alert("Debe aceptar las condiciones de privacidad.");
+          valido = false;
+        }
+  
+        if (valido) {
+          alert("Formulario enviado con éxito.");
+          form.submit(); // Solo se envía si todo es válido
+        }
+      }
+  
+      form.addEventListener("submit", validarFormulario);
+    </script>
+
+    <div class="Fondo" ></div>
+    <footer>
+        <p>&copy; 2025 Relojes Suizos Exclusivos | Síguenos en:</p>
+        <div class="redes">
+            <a href="#"><img src="images/Facebook02.jfif" alt="Facebook"></a>
+            <a href="#"><img src="images/Instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="images/X.jfif" alt="X"></a>
+        </div>
+    </footer>
+    
+</body>
+</html>
