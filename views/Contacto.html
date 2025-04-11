@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  
+    <body>
+
+      <h1>Contáctanos</h1>
+
+      <nav>
+        <ul>
+           <li><a href="../index.html">Inicio</a></li>
+           <li><a href="Galeria.html">Galería</a></li>
+           <li><a href="Presupuesto.html">Presupuesto</a></li>
+           <li><a href="Contacto.html">Contacto</a></li>
+       </ul>
+   </nav>
+
+   <div class="contact-info">
+    <p><strong>Empresa:</strong> The Time Life</p>
+    <p><strong>Dirección:</strong> Rue du Rhône 25, 1204 Genève, Suiza</p>
+    <p><strong>Teléfono:</strong> +41 22 123 45 67</p>
+    <p><strong>Email:</strong> contacto@swissthetimelife.es</p>
+  </div>
+
+  
+
+      <div id="map"></div>
+    
+      <!-- Leaflet y la librería de rutas -->
+      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+      <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+    
+      <script>
+        // Coordenadas de tu negocio (Rue du Rhône 25, 1204 Genève, Suiza)
+        const negocioLatLng = [46.2023, 6.1469];
+    
+        // Inicializar el mapa centrado en tu negocio
+        const map = L.map('map').setView(negocioLatLng, 13);
+    
+        // Cargar OpenStreetMap como capa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+    
+        // Agregar un marcador para el negocio
+        L.marker(negocioLatLng).addTo(map)
+          .bindPopup('¡Aquí está nuestro negocio! Rue du Rhône 25, 1204 Genève, Suiza')
+          .openPopup();
+    
+        // Intentar obtener la ubicación del usuario
+        map.locate({ setView: true, maxZoom: 16 });
+    
+        // Cuando se obtiene la ubicación del usuario
+        map.on('locationfound', function(e) {
+          const userLatLng = e.latlng; // Coordenadas del usuario
+    
+          // Agregar marcador para la ubicación del usuario
+          L.marker(userLatLng).addTo(map)
+            .bindPopup('Tu ubicación')
+            .openPopup();
+    
+          // Calcular la ruta entre el negocio y el usuario
+          L.Routing.control({
+            waypoints: [
+              L.latLng(userLatLng.lat, userLatLng.lng),  // Lugar del usuario
+              L.latLng(negocioLatLng[0], negocioLatLng[1]) // Lugar del negocio
+            ],
+            routeWhileDragging: true  // Permite arrastrar la ruta si se desea
+          }).addTo(map);
+        });
+    
+        // Si falla la geolocalización, mostrar un mensaje
+        map.on('locationerror', function(e) {
+          alert("No pudimos obtener tu ubicación 😞");
+        });
+      </script>
+
+    <footer>
+        <p>&copy; 2025 Relojes Suizos Exclusivos | Síguenos en:</p>
+        <div class="redes">
+            <a href="#"><img src="../images/Facebook02.jfif" alt="Facebook"></a>
+            <a href="#"><img src="../images/Instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="../images/X.jfif" alt="X"></a>
+        </div>
+    </footer> 
+
+</body>
+</html>
